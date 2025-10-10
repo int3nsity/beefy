@@ -1,13 +1,51 @@
-# Hydrogen template: Skeleton
+# Beefy V1 - Jerky Brand E-commerce
 
-Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dovetail with [Remix](https://remix.run/), Shopify’s full stack web framework. This template contains a **minimal setup** of components, queries and tooling to get started with Hydrogen.
+A high-converting e-commerce store built with Shopify Hydrogen and React Router, featuring a bold, playful design system perfect for a jerky brand.
 
-[Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
-[Get familiar with Remix](https://remix.run/docs/en/v1)
+## 🎨 Design System
+
+This project features a comprehensive **Jerky Brand Design System** built with Tailwind CSS v4, including:
+
+- 🎨 **25+ Brand Colors** - Carefully curated palette (flame brown, fire red, ember orange, etc.)
+- 📝 **Typography System** - Three font families (Bebas Neue, Inter, Permanent Marker) with fluid scaling
+- ⚡ **Neo-Brutalist Components** - Bold borders, hard shadows, and high-impact designs
+- 🎭 **Custom Animations** - Wiggle, lift, rotate effects for engagement
+- 📦 **Pre-built Components** - Buttons, cards, badges, and more
+- 📱 **Fully Responsive** - Fluid typography and spacing that scales beautifully
+
+### Quick Start with Design System
+
+1. **View Live Examples**: Visit `/design-system` in your browser
+2. **Read Documentation**: Check `DESIGN_SYSTEM.md` for comprehensive guide
+3. **Quick Reference**: See `DESIGN_SYSTEM_CHEATSHEET.md` for common patterns
+
+### Example Usage
+
+```jsx
+// Bold hero section
+<section className="section-container py-5xl bg-bone-cream texture-noise">
+  <h1 className="text-display text-5xl text-fire-red mb-lg">
+    PREMIUM BEEF JERKY
+  </h1>
+  <button className="btn-primary animate-wiggle">
+    Shop Now
+  </button>
+</section>
+
+// Product card
+<div className="product-card hover-lift">
+  <img src="product.jpg" alt="Product" />
+  <div className="p-lg">
+    <span className="badge">New!</span>
+    <h3 className="text-display text-xl">Product Name</h3>
+    <button className="btn-primary w-full">Add to Cart</button>
+  </div>
+</div>
+```
 
 ## What's included
 
-- Remix
+- React Router v7
 - Hydrogen
 - Oxygen
 - Vite
@@ -15,8 +53,9 @@ Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dov
 - ESLint
 - Prettier
 - GraphQL generator
-- TypeScript and JavaScript flavors
-- Minimal setup of components and routes
+- TypeScript
+- **Tailwind CSS v4** with custom design system
+- Comprehensive component library
 
 ## Getting started
 

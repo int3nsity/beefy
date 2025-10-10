@@ -27,8 +27,13 @@ export function AddToCartButton({
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
+            className={`btn-primary w-full ${
+              disabled || fetcher.state !== 'idle'
+                ? 'opacity-50 cursor-not-allowed'
+                : ''
+            }`}
           >
-            {children}
+            {fetcher.state !== 'idle' ? 'Agregando...' : children}
           </button>
         </>
       )}

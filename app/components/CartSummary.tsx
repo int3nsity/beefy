@@ -15,11 +15,17 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
   return (
-    <div aria-labelledby="cart-summary" className={className}>
-      <h4>Totals</h4>
-      <dl className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
+    <div
+      aria-labelledby="cart-summary"
+      className={`${className} bg-bone-cream p-lg rounded-md border-2 border-midnight mt-xl`}
+    >
+      <h4 className="text-display text-2xl text-charcoal mb-lg">
+        Resumen del Pedido
+      </h4>
+
+      <dl className="cart-subtotal flex justify-between items-center mb-md pb-md border-b border-stone-gray/30">
+        <dt className="text-base text-charcoal">Subtotal</dt>
+        <dd className="text-xl font-bold text-charcoal">
           {cart?.cost?.subtotalAmount?.amount ? (
             <Money data={cart?.cost?.subtotalAmount} />
           ) : (
@@ -27,6 +33,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
           )}
         </dd>
       </dl>
+
       <CartDiscounts discountCodes={cart?.discountCodes} />
       <CartGiftCard giftCardCodes={cart?.appliedGiftCards} />
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
@@ -38,11 +45,17 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl?: string}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
-      <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+    <div className="mt-lg">
+      <a
+        href={checkoutUrl}
+        target="_self"
+        className="btn-primary w-full text-center block"
+      >
+        Finalizar Compra →
       </a>
-      <br />
+      <p className="text-xs text-stone-gray text-center mt-sm">
+        Los gastos de envío se calculan en el checkout
+      </p>
     </div>
   );
 }
@@ -58,16 +71,21 @@ function CartDiscounts({
       ?.map(({code}) => code) || [];
 
   return (
-    <div>
+    <div className="mb-md">
       {/* Have existing discount, display it with a remove option */}
-      <dl hidden={!codes.length}>
+      <dl hidden={!codes.length} className="mb-md">
         <div>
-          <dt>Discount(s)</dt>
+          <dt className="text-sm text-stone-gray mb-xs">
+            Descuentos aplicados
+          </dt>
           <UpdateDiscountForm>
-            <div className="cart-discount">
-              <code>{codes?.join(', ')}</code>
-              &nbsp;
-              <button>Remove</button>
+            <div className="cart-discount flex items-center justify-between bg-success/10 p-sm rounded-sm border border-success">
+              <code className="text-sm text-success font-semibold">
+                {codes?.join(', ')}
+              </code>
+              <button className="text-xs text-error hover:text-salsa-red underline transition-colors">
+                Eliminar
+              </button>
             </div>
           </UpdateDiscountForm>
         </div>
@@ -75,10 +93,19 @@ function CartDiscounts({
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
-          <input type="text" name="discountCode" placeholder="Discount code" />
-          &nbsp;
-          <button type="submit">Apply</button>
+        <div className="flex gap-xs min-w-0">
+          <input
+            type="text"
+            name="discountCode"
+            placeholder="Código de descuento"
+            className="flex-1 px-sm py-xs border-2 border-midnight rounded-sm text-sm focus:outline-none focus:border-fire-red transition-colors min-w-0"
+          />
+          <button
+            type="submit"
+            className="px-md py-xs bg-charcoal text-canvas-light border-2 border-midnight rounded-sm hover:bg-midnight transition-colors text-sm font-semibold flex-shrink-0 whitespace-nowrap"
+          >
+            Aplicar
+          </button>
         </div>
       </UpdateDiscountForm>
     </div>
@@ -129,19 +156,30 @@ function CartGiftCard({
   }
 
   return (
-    <div>
+    <div className="mb-md">
       {/* Display applied gift cards with individual remove buttons */}
       {giftCardCodes && giftCardCodes.length > 0 && (
-        <dl>
-          <dt>Applied Gift Card(s)</dt>
+        <dl className="mb-md">
+          <dt className="text-sm text-stone-gray mb-xs">
+            Tarjetas de regalo aplicadas
+          </dt>
           {giftCardCodes.map((giftCard) => (
             <RemoveGiftCardForm key={giftCard.id} giftCardId={giftCard.id}>
-              <div className="cart-discount">
-                <code>***{giftCard.lastCharacters}</code>
-                &nbsp;
-                <Money data={giftCard.amountUsed} />
-                &nbsp;
-                <button type="submit">Remove</button>
+              <div className="cart-discount flex items-center justify-between bg-info/10 p-sm rounded-sm border border-info mb-xs">
+                <div className="flex items-center gap-sm">
+                  <code className="text-sm text-info font-semibold">
+                    ***{giftCard.lastCharacters}
+                  </code>
+                  <span className="text-sm text-charcoal">
+                    <Money data={giftCard.amountUsed} />
+                  </span>
+                </div>
+                <button
+                  type="submit"
+                  className="text-xs text-error hover:text-salsa-red underline transition-colors"
+                >
+                  Eliminar
+                </button>
               </div>
             </RemoveGiftCardForm>
           ))}
@@ -154,16 +192,20 @@ function CartGiftCard({
         saveAppliedCode={saveAppliedCode}
         fetcherKey="gift-card-add"
       >
-        <div>
+        <div className="flex gap-xs min-w-0">
           <input
             type="text"
             name="giftCardCode"
-            placeholder="Gift card code"
+            placeholder="Código de tarjeta regalo"
             ref={giftCardCodeInput}
+            className="flex-1 px-sm py-xs border-2 border-midnight rounded-sm text-sm focus:outline-none focus:border-fire-red transition-colors min-w-0"
           />
-          &nbsp;
-          <button type="submit" disabled={giftCardAddFetcher.state !== 'idle'}>
-            Apply
+          <button
+            type="submit"
+            disabled={giftCardAddFetcher.state !== 'idle'}
+            className="px-md py-xs bg-charcoal text-canvas-light border-2 border-midnight rounded-sm hover:bg-midnight transition-colors text-sm font-semibold disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0 whitespace-nowrap"
+          >
+            Aplicar
           </button>
         </div>
       </UpdateGiftCardForm>

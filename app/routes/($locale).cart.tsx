@@ -109,9 +109,18 @@ export default function Cart() {
   const cart = useLoaderData<typeof loader>();
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
-      <CartMain layout="page" cart={cart} />
+    <div className="cart section-container py-4xl min-h-screen">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-3xl">
+          <h1 className="text-display text-5xl text-fire-red mb-md">
+            🛒 TU CARRITO
+          </h1>
+          <p className="text-lg text-stone-gray">
+            Revisá tus productos antes de finalizar tu compra
+          </p>
+        </div>
+        <CartMain layout="page" cart={cart} />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 :root {
-  --aside-width: 400px;
+  --aside-width: 450px;
   --cart-aside-summary-height-with-discount: 300px;
   --cart-aside-summary-height: 250px;
   --grid-item-width: 355px;
@@ -35,22 +35,23 @@ img {
 
 aside {
   background: var(--color-light);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.2);
   height: 100vh;
   width: min(var(--aside-width), 100vw);
+  min-width: 320px;
   position: fixed;
   right: calc(-1 * var(--aside-width));
   top: 0;
-  transition: transform 200ms ease-in-out;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
 }
 
 aside header {
   align-items: center;
-  border-bottom: 1px solid var(--color-dark);
   display: flex;
   height: var(--header-height);
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 aside header h3 {
@@ -76,6 +77,8 @@ aside header h2 {
 
 aside main {
   margin: 1rem;
+  overflow-x: hidden;
+  min-width: 0;
 }
 
 aside p {
@@ -250,14 +253,12 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .cart-line {
-  display: flex;
-  padding: 0.75rem 0;
+  list-style: none;
+  overflow: hidden;
 }
 
-.cart-line img {
-  height: 100%;
-  display: block;
-  margin-right: 0.75rem;
+.cart-line * {
+  box-sizing: border-box;
 }
 
 .cart-summary-page {
@@ -265,28 +266,17 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .cart-summary-aside {
-  background: white;
-  border-top: 1px solid var(--color-dark);
+  background: transparent;
+  border-top: none;
   bottom: 0;
-  padding-top: 0.75rem;
+  padding-top: 0;
   position: absolute;
-  width: calc(var(--aside-width) - 40px);
+  width: calc(var(--aside-width) - 32px);
+  margin: 0 16px 16px 16px;
 }
 
-.cart-line-quantity {
-  display: flex;
-}
 
-.cart-discount {
-  align-items: center;
-  display: flex;
-  margin-top: 0.25rem;
-}
 
-.cart-subtotal {
-  align-items: center;
-  display: flex;
-}
 /*
 * --------------------------------------------------
 * components/Search
@@ -518,6 +508,33 @@ button.reset:hover:not(:has(> *)) {
 
 .account-logout {
   display: inline-block;
+}
+
+/*
+* --------------------------------------------------
+* Homepage Sections - Force proper spacing
+* --------------------------------------------------
+*/
+.home section {
+  padding: 4rem 0 !important;
+}
+
+@media (min-width: 768px) {
+  .home section {
+    padding: 6rem 0 !important;
+  }
+}
+
+.home .section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .home .section-container {
+    padding: 0 2rem;
+  }
 }
 
 /*

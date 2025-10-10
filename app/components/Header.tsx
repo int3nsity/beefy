@@ -25,17 +25,26 @@ export function Header({
 }: HeaderProps) {
   const {shop, menu} = header;
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+    <header className="bg-bone-cream border-b-2 border-midnight sticky top-0 z-[var(--z-sticky)]">
+      <div className="section-container py-md">
+        <div className="flex items-center justify-between">
+          <NavLink
+            prefetch="intent"
+            to="/"
+            end
+            className="text-display text-2xl text-fire-red hover:text-ember-orange transition-colors"
+          >
+            {shop.name}
+          </NavLink>
+          <HeaderMenu
+            menu={menu}
+            viewport="desktop"
+            primaryDomainUrl={header.shop.primaryDomain.url}
+            publicStoreDomain={publicStoreDomain}
+          />
+          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+        </div>
+      </div>
     </header>
   );
 }
@@ -51,46 +60,132 @@ export function HeaderMenu({
   viewport: Viewport;
   publicStoreDomain: HeaderProps['publicStoreDomain'];
 }) {
-  const className = `header-menu-${viewport}`;
   const {close} = useAside();
 
-  return (
-    <nav className={className} role="navigation">
-      {viewport === 'mobile' && (
+  // Spanish translations for menu items
+  const translations: Record<string, string> = {
+    Home: 'Inicio',
+    Collections: 'Tienda',
+    Blog: 'Blog',
+    Policies: 'Políticas',
+    About: 'Nosotros',
+    Contact: 'Contacto',
+  };
+
+  if (viewport === 'desktop') {
+    return (
+      <nav className="hidden lg:flex items-center gap-xl" role="navigation">
         <NavLink
           end
-          onClick={close}
           prefetch="intent"
-          style={activeLinkStyle}
           to="/"
+          className={({isActive}) =>
+            `text-base font-medium transition-colors ${
+              isActive
+                ? 'text-fire-red font-bold'
+                : 'text-charcoal hover:text-fire-red'
+            }`
+          }
         >
-          Home
+          Inicio
         </NavLink>
-      )}
+        {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+          if (!item.url) return null;
+
+          const url =
+            item.url.includes('myshopify.com') ||
+            item.url.includes(publicStoreDomain) ||
+            item.url.includes(primaryDomainUrl)
+              ? new URL(item.url).pathname
+              : item.url;
+
+          const translatedTitle = translations[item.title] || item.title;
+
+          return (
+            <NavLink
+              end
+              key={item.id}
+              prefetch="intent"
+              to={url}
+              className={({isActive}) =>
+                `text-base font-medium transition-colors ${
+                  isActive
+                    ? 'text-fire-red font-bold'
+                    : 'text-charcoal hover:text-fire-red'
+                }`
+              }
+            >
+              {translatedTitle}
+            </NavLink>
+          );
+        })}
+        <NavLink
+          prefetch="intent"
+          to="/contacto"
+          className={({isActive}) =>
+            `text-base font-medium transition-colors ${
+              isActive
+                ? 'text-fire-red font-bold'
+                : 'text-charcoal hover:text-fire-red'
+            }`
+          }
+        >
+          Contacto
+        </NavLink>
+      </nav>
+    );
+  }
+
+  return (
+    <nav className="flex flex-col gap-lg p-lg" role="navigation">
+      <NavLink
+        end
+        onClick={close}
+        prefetch="intent"
+        to="/"
+        className={({isActive}) =>
+          `text-lg font-medium ${isActive ? 'text-fire-red font-bold' : 'text-charcoal'}`
+        }
+      >
+        Inicio
+      </NavLink>
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
-        // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
+
+        const translatedTitle = translations[item.title] || item.title;
+
         return (
           <NavLink
-            className="header-menu-item"
             end
             key={item.id}
             onClick={close}
             prefetch="intent"
-            style={activeLinkStyle}
             to={url}
+            className={({isActive}) =>
+              `text-lg font-medium ${isActive ? 'text-fire-red font-bold' : 'text-charcoal'}`
+            }
           >
-            {item.title}
+            {translatedTitle}
           </NavLink>
         );
       })}
+      <NavLink
+        onClick={close}
+        prefetch="intent"
+        to="/contacto"
+        className={({isActive}) =>
+          `text-lg font-medium ${isActive ? 'text-fire-red font-bold' : 'text-charcoal'}`
+        }
+      >
+        Contacto
+      </NavLink>
     </nav>
   );
 }
@@ -100,16 +195,20 @@ function HeaderCtas({
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <nav className="header-ctas" role="navigation">
+    <nav className="flex items-center gap-md" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
+      <SearchToggle />
+      <NavLink
+        prefetch="intent"
+        to="/account"
+        className="hidden md:block text-sm font-medium text-charcoal hover:text-fire-red transition-colors"
+      >
+        <Suspense fallback="Cuenta">
+          <Await resolve={isLoggedIn} errorElement="Iniciar Sesión">
+            {(isLoggedIn) => (isLoggedIn ? 'Cuenta' : 'Iniciar Sesión')}
           </Await>
         </Suspense>
       </NavLink>
-      <SearchToggle />
       <CartToggle cart={cart} />
     </nav>
   );
@@ -119,10 +218,11 @@ function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
     <button
-      className="header-menu-mobile-toggle reset"
+      className="lg:hidden text-2xl text-charcoal hover:text-fire-red transition-colors"
       onClick={() => open('mobile')}
+      aria-label="Abrir menú"
     >
-      <h3>☰</h3>
+      ☰
     </button>
   );
 }
@@ -130,8 +230,11 @@ function HeaderMenuMobileToggle() {
 function SearchToggle() {
   const {open} = useAside();
   return (
-    <button className="reset" onClick={() => open('search')}>
-      Search
+    <button
+      className="text-sm font-medium text-charcoal hover:text-fire-red transition-colors"
+      onClick={() => open('search')}
+    >
+      Buscar
     </button>
   );
 }
@@ -141,8 +244,7 @@ function CartBadge({count}: {count: number | null}) {
   const {publish, shop, cart, prevCart} = useAnalytics();
 
   return (
-    <a
-      href="/cart"
+    <button
       onClick={(e) => {
         e.preventDefault();
         open('cart');
@@ -153,9 +255,15 @@ function CartBadge({count}: {count: number | null}) {
           url: window.location.href || '',
         } as CartViewPayload);
       }}
+      className="relative text-sm font-medium text-charcoal hover:text-fire-red transition-colors"
     >
-      Cart {count === null ? <span>&nbsp;</span> : count}
-    </a>
+      Carrito
+      {count !== null && count > 0 && (
+        <span className="absolute -top-2 -right-2 bg-fire-red text-canvas-light text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          {count}
+        </span>
+      )}
+    </button>
   );
 }
 

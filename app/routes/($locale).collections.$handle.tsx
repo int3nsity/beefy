@@ -69,21 +69,84 @@ export default function Collection() {
   const {collection} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <PaginatedResourceSection<ProductItemFragment>
-        connection={collection.products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-bone-cream py-4xl border-b-2 border-midnight">
+        <div className="section-container text-center">
+          <h1 className="text-display text-5xl md:text-6xl text-fire-red mb-lg">
+            {collection.title}
+          </h1>
+          {collection.description && (
+            <p className="text-xl text-charcoal max-w-3xl mx-auto">
+              {collection.description}
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* Products Section */}
+      <section className="section-container py-4xl">
+        {/* Filter/Sort Bar */}
+        <div className="mb-3xl pb-lg border-b-2 border-stone-gray">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-md">
+            <p className="text-base text-stone-gray">
+              <span className="font-bold text-charcoal">
+                {collection.products.nodes.length}
+              </span>{' '}
+              productos encontrados
+            </p>
+
+            <div className="flex flex-wrap gap-md">
+              <span className="text-sm font-semibold text-charcoal">
+                Filtrar por:
+              </span>
+              <button className="text-sm text-ember-orange hover:text-fire-red font-medium">
+                Más vendidos
+              </button>
+              <button className="text-sm text-stone-gray hover:text-fire-red font-medium">
+                Precio: Bajo a Alto
+              </button>
+              <button className="text-sm text-stone-gray hover:text-fire-red font-medium">
+                Precio: Alto a Bajo
+              </button>
+              <button className="text-sm text-stone-gray hover:text-fire-red font-medium">
+                Nuevos
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Products Grid */}
+        <PaginatedResourceSection<ProductItemFragment>
+          connection={collection.products}
+          resourcesClassName="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-xl"
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : undefined}
+            />
+          )}
+        </PaginatedResourceSection>
+
+        {/* Empty State */}
+        {collection.products.nodes.length === 0 && (
+          <div className="text-center py-5xl">
+            <div className="text-6xl mb-lg">📦</div>
+            <h2 className="text-display text-3xl text-midnight mb-md">
+              No hay productos disponibles
+            </h2>
+            <p className="text-lg text-stone-gray mb-xl">
+              Pronto agregaremos nuevos productos a esta colección
+            </p>
+            <a href="/collections" className="btn-primary">
+              Ver Todas las Colecciones
+            </a>
+          </div>
         )}
-      </PaginatedResourceSection>
+      </section>
+
       <Analytics.CollectionView
         data={{
           collection: {

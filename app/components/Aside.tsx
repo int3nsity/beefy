@@ -59,14 +59,18 @@ export function Aside({
       role="dialog"
     >
       <button className="close-outside" onClick={close} />
-      <aside>
-        <header>
-          <h3>{heading}</h3>
-          <button className="close reset" onClick={close} aria-label="Close">
+      <aside className="bg-canvas-light">
+        <header className="bg-bone-cream border-b-4 border-midnight">
+          <h3 className="text-display text-2xl text-charcoal">{heading}</h3>
+          <button
+            className="close reset text-3xl text-charcoal hover:text-fire-red transition-colors font-bold leading-none"
+            onClick={close}
+            aria-label="Cerrar"
+          >
             &times;
           </button>
         </header>
-        <main>{children}</main>
+        <main className="bg-canvas-light">{children}</main>
       </aside>
     </div>
   );

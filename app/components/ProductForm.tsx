@@ -18,15 +18,17 @@ export function ProductForm({
   const navigate = useNavigate();
   const {open} = useAside();
   return (
-    <div className="product-form">
+    <div className="space-y-lg">
       {productOptions.map((option) => {
         // If there is only a single value in the option values, don't display the option
         if (option.optionValues.length === 1) return null;
 
         return (
-          <div className="product-options" key={option.name}>
-            <h5>{option.name}</h5>
-            <div className="product-options-grid">
+          <div key={option.name}>
+            <h5 className="text-display text-lg text-midnight mb-md">
+              {option.name}
+            </h5>
+            <div className="flex flex-wrap gap-md">
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -39,48 +41,31 @@ export function ProductForm({
                   swatch,
                 } = value;
 
+                const buttonClasses = `px-lg py-md rounded-md border-2 transition-all font-medium text-base ${
+                  selected
+                    ? 'border-fire-red bg-fire-red text-canvas-light'
+                    : 'border-midnight bg-canvas-light text-charcoal hover:border-fire-red'
+                } ${!available ? 'opacity-30 cursor-not-allowed' : ''}`;
+
                 if (isDifferentProduct) {
-                  // SEO
-                  // When the variant is a combined listing child product
-                  // that leads to a different url, we need to render it
-                  // as an anchor tag
                   return (
                     <Link
-                      className="product-options-item"
+                      className={buttonClasses}
                       key={option.name + name}
                       prefetch="intent"
                       preventScrollReset
                       replace
                       to={`/products/${handle}?${variantUriQuery}`}
-                      style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
-                        opacity: available ? 1 : 0.3,
-                      }}
                     >
                       <ProductOptionSwatch swatch={swatch} name={name} />
                     </Link>
                   );
                 } else {
-                  // SEO
-                  // When the variant is an update to the search param,
-                  // render it as a button with javascript navigating to
-                  // the variant so that SEO bots do not index these as
-                  // duplicated links
                   return (
                     <button
                       type="button"
-                      className={`product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }`}
+                      className={buttonClasses}
                       key={option.name + name}
-                      style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
-                        opacity: available ? 1 : 0.3,
-                      }}
                       disabled={!exists}
                       onClick={() => {
                         if (!selected) {
@@ -97,10 +82,20 @@ export function ProductForm({
                 }
               })}
             </div>
-            <br />
           </div>
         );
       })}
+
+      {/* Stock Indicator */}
+      {selectedVariant &&
+        selectedVariant.quantityAvailable !== null &&
+        selectedVariant.quantityAvailable <= 10 &&
+        selectedVariant.quantityAvailable > 0 && (
+          <p className="text-sm text-warning font-semibold">
+            ⚠️ ¡Solo quedan {selectedVariant.quantityAvailable} disponibles!
+          </p>
+        )}
+
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
@@ -118,7 +113,7 @@ export function ProductForm({
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        {selectedVariant?.availableForSale ? 'Agregar al Carrito' : 'Agotado'}
       </AddToCartButton>
     </div>
   );

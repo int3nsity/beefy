@@ -31,16 +31,24 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
   return (
     <div className={className}>
       <CartEmpty hidden={linesCount} layout={layout} />
-      <div className="cart-details">
-        <div aria-labelledby="cart-lines">
-          <ul>
-            {(cart?.lines?.nodes ?? []).map((line) => (
-              <CartLineItem key={line.id} line={line} layout={layout} />
-            ))}
-          </ul>
+      {cartHasItems && (
+        <div className="cart-details">
+          <div aria-labelledby="cart-lines" className="mb-xl">
+            <h2 className="text-display text-2xl text-charcoal mb-lg px-md">
+              {cart?.totalQuantity}{' '}
+              {cart?.totalQuantity === 1 ? 'Producto' : 'Productos'}
+            </h2>
+            <ul className="px-md space-y-0">
+              {(cart?.lines?.nodes ?? []).map((line) => (
+                <CartLineItem key={line.id} line={line} layout={layout} />
+              ))}
+            </ul>
+          </div>
+          <div className="px-md">
+            <CartSummary cart={cart} layout={layout} />
+          </div>
         </div>
-        {cartHasItems && <CartSummary cart={cart} layout={layout} />}
-      </div>
+      )}
     </div>
   );
 }
@@ -53,15 +61,19 @@ function CartEmpty({
 }) {
   const {close} = useAside();
   return (
-    <div hidden={hidden}>
-      <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
+    <div hidden={hidden} className="text-center py-xl">
+      <div className="text-6xl mb-lg">🛒</div>
+      <p className="text-xl text-charcoal mb-md">Tu carrito está vacío</p>
+      <p className="text-base text-stone-gray mb-xl">
+        ¡Descubrí nuestros deliciosos productos!
       </p>
-      <br />
-      <Link to="/collections" onClick={close} prefetch="viewport">
-        Continue shopping →
+      <Link
+        to="/collections"
+        onClick={close}
+        prefetch="viewport"
+        className="btn-primary inline-block"
+      >
+        Ver Productos
       </Link>
     </div>
   );
