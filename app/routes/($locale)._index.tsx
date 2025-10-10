@@ -7,6 +7,7 @@ import type {
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
 import {ProductItem} from '~/components/ProductItem';
+import heroMobile from '~/assets/hero-mobile.png';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: 'Beefy - Auténtico Charqui Argentino | Snacks Naturales'}];
@@ -62,6 +63,7 @@ export default function Homepage() {
     <div className="home">
       <HeroSection />
       <TrustBadges />
+      <BundleBuilderCTA />
       <FeaturedProducts products={data.recommendedProducts} />
       <SocialProof />
       <CTABanner />
@@ -74,11 +76,58 @@ function HeroSection() {
   return (
     <section className="min-h-[70vh] flex items-center bg-gradient-to-br from-bone-cream via-canvas-light to-toast-tan texture-noise">
       <div className="section-container py-5xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3xl items-center">
+        {/* Mobile Layout - Single Column with Product Image */}
+        <div className="block lg:hidden">
+          <div className="space-y-3xl">
+            {/* Product Image */}
+            <div className="relative">
+              <div className="flex justify-center">
+                <img
+                  src={heroMobile}
+                  alt="Beefy Snacks - Beef Jerk Gringo Product"
+                  className="max-w-sm w-full h-auto"
+                />
+              </div>
+              <div className="absolute -top-4 -right-4">
+                <span className="badge bg-salsa-red animate-rotate-slow">
+                  ¡Nuevo!
+                </span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="text-center space-y-lg">
+              <h1 className="text-display text-4xl md:text-5xl text-fire-red leading-tight">
+                AUTÉNTICO CHARQUI CHILENO
+              </h1>
+              <p className="text-lg md:text-xl text-charcoal leading-relaxed">
+                Sabor tradicional con ingredientes 100% naturales. Hecho a mano
+                con la mejor carne chilena.
+              </p>
+              <p className="text-base text-stone-gray">
+                Sin conservantes • Sin gluten • Alto en proteínas
+              </p>
+              <div className="flex flex-col sm:flex-row gap-md justify-center">
+                <Link to="/collections" className="btn-primary animate-wiggle">
+                  Ver Todos los Productos
+                </Link>
+                <Link
+                  to="/contacto"
+                  className="px-2xl py-md bg-canvas-light border-2 border-midnight rounded-md font-bold text-midnight hover:bg-bone-cream transition-colors text-center"
+                >
+                  Contáctanos
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Layout - Two Column Grid */}
+        <div className="hidden lg:grid lg:grid-cols-2 gap-3xl items-center">
           {/* Left Column - Content */}
           <div className="space-y-lg">
             <h1 className="text-display text-5xl md:text-6xl lg:text-7xl text-fire-red leading-tight">
-              AUTÉNTICO JERKY CHILENO
+              AUTÉNTICO CHARQUI CHILENO
             </h1>
             <p className="text-xl md:text-2xl text-charcoal leading-relaxed">
               Sabor tradicional con ingredientes 100% naturales. Hecho a mano
@@ -151,6 +200,69 @@ function TrustBadges() {
               Proceso artesanal tradicional chileno
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BundleBuilderCTA() {
+  return (
+    <section className="bg-gradient-to-br from-fire-red to-salsa-red py-4xl border-y-4 border-midnight">
+      <div className="section-container">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-lg">
+            <span className="inline-block bg-ember-orange text-canvas-light px-lg py-sm rounded-full font-bold text-sm border-2 border-midnight shadow-brutal-xs animate-bounce-subtle">
+              ⭐ NUEVA FUNCIÓN
+            </span>
+          </div>
+
+          <h2 className="text-display text-4xl md:text-5xl text-canvas-light mb-lg drop-shadow-brutal">
+            🥩 Armá tu Caja Perfecta
+          </h2>
+
+          <p className="text-xl md:text-2xl text-bone-cream mb-md font-semibold">
+            Elegí exactamente 7 unidades de tus sabores favoritos
+          </p>
+
+          <p className="text-base md:text-lg text-canvas-light/90 mb-xl max-w-2xl mx-auto">
+            Personalizá tu experiencia, mezclá los sabores que más te gustan y
+            ahorrá con nuestro pack especial de 7 unidades
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-md justify-center items-center mb-xl">
+            <div className="flex items-center gap-sm text-canvas-light">
+              <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center font-bold border-2 border-midnight">
+                ✓
+              </div>
+              <span className="text-base font-semibold">Elegís 7 sabores</span>
+            </div>
+            <div className="flex items-center gap-sm text-canvas-light">
+              <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center font-bold border-2 border-midnight">
+                ✓
+              </div>
+              <span className="text-base font-semibold">Mejor precio</span>
+            </div>
+            <div className="flex items-center gap-sm text-canvas-light">
+              <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center font-bold border-2 border-midnight">
+                ✓
+              </div>
+              <span className="text-base font-semibold">
+                100% personalizable
+              </span>
+            </div>
+          </div>
+
+          <Link
+            to="/products/arma-tu-caja"
+            className="inline-block bg-canvas-light text-fire-red px-3xl py-lg rounded-lg font-bold text-xl hover:bg-bone-cream transition-all border-4 border-midnight shadow-brutal-lg hover:shadow-brutal-xl hover:-translate-y-1 animate-wiggle-slow"
+          >
+            🎯 Crear Mi Caja Ahora
+          </Link>
+
+          <p className="text-sm text-canvas-light/80 mt-lg">
+            ✨ ¡Probá la función "Sorprendeme" para una selección aleatoria!
+          </p>
         </div>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import {useMemo} from 'react';
 import {useOptimisticCart} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
@@ -28,6 +29,32 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
   const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
   const cartHasItems = cart?.totalQuantity ? cart.totalQuantity > 0 : false;
 
+  // Agrupar líneas por bundle
+  const {bundleGroups, regularLines} = useMemo(() => {
+    const lines = cart?.lines?.nodes ?? [];
+    const bundles: Record<string, typeof lines> = {};
+    const regular: typeof lines = [];
+
+    lines.forEach((line) => {
+      const bundleIdAttr = line.attributes?.find(
+        (attr) => attr.key === '_bundle_id',
+      );
+      if (bundleIdAttr) {
+        const bundleId = bundleIdAttr.value;
+        if (!bundles[bundleId]) {
+          bundles[bundleId] = [];
+        }
+        bundles[bundleId].push(line);
+      } else {
+        regular.push(line);
+      }
+    });
+
+    return {bundleGroups: Object.entries(bundles), regularLines: regular};
+  }, [cart?.lines?.nodes]);
+
+  const hasBundles = bundleGroups.length > 0;
+
   return (
     <div className={className}>
       <CartEmpty hidden={linesCount} layout={layout} />
@@ -38,13 +65,54 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
               {cart?.totalQuantity}{' '}
               {cart?.totalQuantity === 1 ? 'Producto' : 'Productos'}
             </h2>
-            <ul className="px-md space-y-0">
-              {(cart?.lines?.nodes ?? []).map((line) => (
-                <CartLineItem key={line.id} line={line} layout={layout} />
-              ))}
-            </ul>
+            <div className="px-md space-y-lg">
+              {/* Renderizar bundles agrupados */}
+              {hasBundles &&
+                bundleGroups.map(([bundleId, bundleLines]) => {
+                  const bundleName =
+                    bundleLines[0]?.attributes?.find(
+                      (attr) => attr.key === '_bundle',
+                    )?.value || 'Bundle';
+                  return (
+                    <div
+                      key={bundleId}
+                      className="bg-bone-cream border-2 border-fire-red rounded-lg p-md"
+                    >
+                      <div className="flex justify-between items-center mb-md">
+                        <h3 className="text-display text-xl text-fire-red">
+                          📦 {bundleName}
+                        </h3>
+                        <Link
+                          to="/products/arma-tu-caja"
+                          className="text-sm text-fire-red hover:text-salsa-red font-semibold underline"
+                        >
+                          ✏️ Editar
+                        </Link>
+                      </div>
+                      <ul className="space-y-0">
+                        {bundleLines.map((line) => (
+                          <CartLineItem
+                            key={line.id}
+                            line={line}
+                            layout={layout}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+
+              {/* Renderizar productos regulares */}
+              {regularLines.length > 0 && (
+                <ul className="space-y-0">
+                  {regularLines.map((line) => (
+                    <CartLineItem key={line.id} line={line} layout={layout} />
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
-          <div className="px-md">
+          <div className={layout === 'aside' ? 'px-sm' : 'px-md'}>
             <CartSummary cart={cart} layout={layout} />
           </div>
         </div>

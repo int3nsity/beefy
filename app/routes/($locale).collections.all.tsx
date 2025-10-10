@@ -51,20 +51,89 @@ export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
-      <PaginatedResourceSection<CollectionItemFragment>
-        connection={products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-bone-cream via-canvas-light to-bone-cream py-5xl border-b-4 border-midnight overflow-hidden">
+        {/* Background Texture */}
+        <div className="absolute inset-0 texture-noise opacity-10"></div>
+
+        {/* Decorative Elements */}
+        <div className="absolute top-10 left-10 w-20 h-20 bg-ember-orange border-brutal-sm rounded-full animate-rotate-slow opacity-20"></div>
+        <div
+          className="absolute bottom-20 right-20 w-16 h-16 bg-fire-red border-brutal-sm rounded-full animate-rotate-slow opacity-20"
+          style={{animationDirection: 'reverse', animationDuration: '30s'}}
+        ></div>
+
+        <div className="section-container relative z-10">
+          {/* Main Content */}
+          <div className="text-center mb-2xl">
+            <h1 className="text-display text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-fire-red mb-xl leading-tight">
+              TODOS LOS PRODUCTOS
+            </h1>
+            <div className="mx-auto">
+              <p className="text-2xl md:text-3xl lg:text-4xl text-charcoal font-medium leading-relaxed mb-2xl">
+                Explora toda nuestra gama de productos premium
+              </p>
+              <p className="text-xl md:text-2xl text-stone-gray leading-relaxed mb-3xl">
+                Descubre sabores únicos, ingredientes de la más alta calidad y
+                experiencias gastronómicas que deleitarán tu paladar
+              </p>
+            </div>
+          </div>
+
+          {/* Feature highlights */}
+          <div className="flex flex-wrap items-center justify-center gap-lg text-stone-gray mb-2xl">
+            <span className="text-base font-medium">Productos frescos</span>
+            <span className="w-2 h-2 bg-ember-orange rounded-full"></span>
+            <span className="text-base font-medium">Envío rápido</span>
+            <span className="w-2 h-2 bg-ember-orange rounded-full"></span>
+            <span className="text-base font-medium">Calidad premium</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Section */}
+      <section className="section-container py-3xl">
+        {/* Product Count */}
+        <div className="mb-2xl pb-lg border-b-2 border-stone-gray">
+          <p className="text-lg text-stone-gray text-center">
+            <span className="font-bold text-charcoal text-xl">
+              {products.nodes.length}
+            </span>{' '}
+            productos encontrados
+          </p>
+        </div>
+
+        {/* Products Grid */}
+        <PaginatedResourceSection<CollectionItemFragment>
+          connection={products}
+          resourcesClassName="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-xl"
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : undefined}
+            />
+          )}
+        </PaginatedResourceSection>
+
+        {/* Empty State */}
+        {products.nodes.length === 0 && (
+          <div className="text-center py-5xl">
+            <div className="text-6xl mb-lg">📦</div>
+            <h2 className="text-display text-3xl text-midnight mb-md">
+              No hay productos disponibles
+            </h2>
+            <p className="text-lg text-stone-gray mb-xl">
+              Pronto agregaremos nuevos productos
+            </p>
+            <a href="/collections" className="btn-primary">
+              Ver Colecciones
+            </a>
+          </div>
         )}
-      </PaginatedResourceSection>
+      </section>
     </div>
   );
 }

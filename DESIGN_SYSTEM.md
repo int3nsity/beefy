@@ -528,4 +528,3 @@ For questions or issues with the design system:
 **Version**: 1.0.0  
 **Last Updated**: October 2025  
 **Tailwind Version**: 4.1.6
-

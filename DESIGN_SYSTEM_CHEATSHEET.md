@@ -215,4 +215,3 @@ className = 'bg-bone-cream text-charcoal';
 ---
 
 **Need help?** Check the full `DESIGN_SYSTEM.md` for detailed examples and explanations.
-

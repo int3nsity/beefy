@@ -272,7 +272,8 @@ button.reset:hover:not(:has(> *)) {
   padding-top: 0;
   position: absolute;
   width: calc(var(--aside-width) - 32px);
-  margin: 0 16px 16px 16px;
+  left: 16px;
+  right: 16px;
 }
 
 

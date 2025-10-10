@@ -20,19 +20,27 @@ export function CartLineItem({
   layout: CartLayout;
   line: CartLine;
 }) {
-  const {id, merchandise} = line;
+  const {id, merchandise, attributes} = line;
   const {product, title, image, selectedOptions} = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
   const {close} = useAside();
 
+  // Detectar si es parte de un bundle
+  const bundleAttribute = attributes?.find((attr) => attr.key === '_bundle');
+  const isPartOfBundle = !!bundleAttribute;
+
   return (
     <li
       key={id}
-      className="cart-line border-b border-stone-gray/20 pb-lg mb-lg last:border-b-0"
+      className={`cart-line border-b border-stone-gray/20 pb-lg mb-lg last:border-b-0 p-md rounded-md ${
+        isPartOfBundle
+          ? 'bg-fire-red/5 border-2 border-fire-red/30'
+          : 'bg-canvas-light'
+      }`}
     >
       <div className="flex gap-md min-w-0">
         {image && (
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 relative">
             <Image
               alt={title}
               aspectRatio="1/1"
@@ -42,11 +50,23 @@ export function CartLineItem({
               width={100}
               className="rounded-md border-2 border-midnight"
             />
+            {isPartOfBundle && (
+              <div className="absolute -top-2 -right-2 bg-fire-red text-canvas-light text-xs font-bold px-2 py-1 rounded-full shadow-brutal-xs">
+                📦
+              </div>
+            )}
           </div>
         )}
 
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div className="min-w-0">
+            {isPartOfBundle && (
+              <div className="mb-xs">
+                <span className="inline-block bg-fire-red text-canvas-light text-xs font-bold px-sm py-xs rounded-md">
+                  🥩 {bundleAttribute.value}
+                </span>
+              </div>
+            )}
             <Link
               prefetch="intent"
               to={lineItemUrl}
@@ -55,7 +75,7 @@ export function CartLineItem({
                   close();
                 }
               }}
-              className="hover:text-fire-red transition-colors block"
+              className="hover:text-fire-red transition-colors block cursor-pointer"
             >
               <h3 className="text-display text-lg text-charcoal mb-xs break-words">
                 {product.title}
@@ -100,7 +120,7 @@ function CartLineQuantity({line}: {line: CartLine}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="flex items-center justify-between gap-sm w-full">
+    <div className="flex items-center gap-xs w-full">
       <div className="flex items-center gap-sm flex-shrink-0">
         <span className="text-sm text-stone-gray">Cantidad:</span>
         <div className="flex items-center border-2 border-midnight rounded-sm bg-canvas-light">
@@ -110,7 +130,7 @@ function CartLineQuantity({line}: {line: CartLine}) {
               disabled={quantity <= 1 || !!isOptimistic}
               name="decrease-quantity"
               value={prevQuantity}
-              className="px-sm py-xs text-charcoal hover:bg-bone-cream transition-colors disabled:opacity-30 disabled:cursor-not-allowed font-bold text-lg"
+              className="px-sm py-xs text-charcoal hover:bg-bone-cream transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-bold text-lg"
             >
               −
             </button>
@@ -126,7 +146,7 @@ function CartLineQuantity({line}: {line: CartLine}) {
               name="increase-quantity"
               value={nextQuantity}
               disabled={!!isOptimistic}
-              className="px-sm py-xs text-charcoal hover:bg-bone-cream transition-colors disabled:opacity-30 disabled:cursor-not-allowed font-bold text-lg"
+              className="px-sm py-xs text-charcoal hover:bg-bone-cream transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-bold text-lg"
             >
               +
             </button>
@@ -163,9 +183,22 @@ function CartLineRemoveButton({
       <button
         disabled={disabled}
         type="submit"
-        className="text-sm text-error hover:text-salsa-red transition-colors disabled:opacity-30 disabled:cursor-not-allowed underline whitespace-nowrap"
+        className="text-error hover:text-salsa-red transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer p-xs rounded-md hover:bg-error/10"
+        aria-label="Eliminar producto"
       >
-        Eliminar
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
       </button>
     </CartForm>
   );

@@ -75,22 +75,26 @@ export function HeaderMenu({
   if (viewport === 'desktop') {
     return (
       <nav className="hidden lg:flex items-center gap-xl" role="navigation">
+        {/* CTA destacado para Armá tu Caja */}
         <NavLink
-          end
           prefetch="intent"
-          to="/"
-          className={({isActive}) =>
-            `text-base font-medium transition-colors ${
-              isActive
-                ? 'text-fire-red font-bold'
-                : 'text-charcoal hover:text-fire-red'
-            }`
-          }
+          to="/products/arma-tu-caja"
+          className="bg-fire-red text-canvas-light px-lg py-sm rounded-md font-bold text-base hover:bg-salsa-red transition-all hover:shadow-brutal-xs border-2 border-midnight"
         >
-          Inicio
+          🥩 Armá tu Caja
         </NavLink>
+
         {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
           if (!item.url) return null;
+
+          // Skip if it's a Home or Contact item (we have custom ones)
+          if (
+            item.title === 'Home' ||
+            item.title === 'Contact' ||
+            item.title === 'Contacto'
+          ) {
+            return null;
+          }
 
           const url =
             item.url.includes('myshopify.com') ||
@@ -138,19 +142,27 @@ export function HeaderMenu({
 
   return (
     <nav className="flex flex-col gap-lg p-lg" role="navigation">
+      {/* CTA destacado para Armá tu Caja en mobile */}
       <NavLink
-        end
         onClick={close}
         prefetch="intent"
-        to="/"
-        className={({isActive}) =>
-          `text-lg font-medium ${isActive ? 'text-fire-red font-bold' : 'text-charcoal'}`
-        }
+        to="/products/arma-tu-caja"
+        className="bg-fire-red text-canvas-light px-lg py-md rounded-md font-bold text-lg text-center hover:bg-salsa-red transition-all border-2 border-midnight shadow-brutal-sm"
       >
-        Inicio
+        🥩 Armá tu Caja (7 un)
       </NavLink>
+
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
+
+        // Skip if it's a Home or Contact item (we have custom ones)
+        if (
+          item.title === 'Home' ||
+          item.title === 'Contact' ||
+          item.title === 'Contacto'
+        ) {
+          return null;
+        }
 
         const url =
           item.url.includes('myshopify.com') ||
@@ -255,11 +267,24 @@ function CartBadge({count}: {count: number | null}) {
           url: window.location.href || '',
         } as CartViewPayload);
       }}
-      className="relative text-sm font-medium text-charcoal hover:text-fire-red transition-colors"
+      className="relative text-charcoal hover:text-fire-red transition-colors p-sm rounded-md hover:bg-bone-cream"
+      aria-label="Abrir carrito"
     >
-      Carrito
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-6 h-6"
+      >
+        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+      </svg>
       {count !== null && count > 0 && (
-        <span className="absolute -top-2 -right-2 bg-fire-red text-canvas-light text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        <span className="absolute -top-1 -right-1 bg-fire-red text-canvas-light text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-canvas-light">
           {count}
         </span>
       )}
