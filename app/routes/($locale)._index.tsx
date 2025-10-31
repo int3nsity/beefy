@@ -1,13 +1,18 @@
 import {Await, useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/_index';
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 import {Image} from '@shopify/hydrogen';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
 import {ProductItem} from '~/components/ProductItem';
-import heroMobile from '~/assets/hero-mobile.png';
+import heroBackground from '~/assets/hero-background.png';
+import triobeefy from '~/assets/triobeefy.png';
+import vacaBeefy from '~/assets/vaca-beefy.svg';
+import musleBeefy from '~/assets/musle-beefy.svg';
+import manoBeefy from '~/assets/mano-beefy.svg';
+import montanaBeefy from '~/assets/montana-beefy.svg';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: 'Beefy - Auténtico Charqui Argentino | Snacks Naturales'}];
@@ -62,11 +67,11 @@ export default function Homepage() {
   return (
     <div className="home">
       <HeroSection />
-      <TrustBadges />
-      <BundleBuilderCTA />
+      <ProductShowcaseSection />
+      {/* <TrustBadges /> */}
       <FeaturedProducts products={data.recommendedProducts} />
-      <SocialProof />
-      <CTABanner />
+      {/* <SocialProof /> */}
+      {/* <CTABanner /> */}
       <FeaturedCollection collection={data.featuredCollection} />
     </div>
   );
@@ -74,92 +79,100 @@ export default function Homepage() {
 
 function HeroSection() {
   return (
-    <section className="min-h-[70vh] flex items-center bg-gradient-to-br from-bone-cream via-canvas-light to-toast-tan texture-noise">
-      <div className="section-container py-5xl">
-        {/* Mobile Layout - Single Column with Product Image */}
-        <div className="block lg:hidden">
-          <div className="space-y-3xl">
-            {/* Product Image */}
-            <div className="relative">
-              <div className="flex justify-center">
-                <img
-                  src={heroMobile}
-                  alt="Beefy Snacks - Beef Jerk Gringo Product"
-                  className="max-w-sm w-full h-auto"
-                />
-              </div>
-              <div className="absolute -top-4 -right-4">
-                <span className="badge bg-salsa-red animate-rotate-slow">
-                  ¡Nuevo!
-                </span>
-              </div>
-            </div>
+    <section className="relative">
+      {/* Background Image */}
+      <img
+        src={heroBackground}
+        alt="Beefy Snacks - Authentic Chilean Charqui"
+        className="w-full h-auto block"
+      />
 
-            {/* Content */}
-            <div className="text-center space-y-lg">
-              <h1 className="text-display text-4xl md:text-5xl text-fire-red leading-tight">
-                AUTÉNTICO CHARQUI CHILENO
-              </h1>
-              <p className="text-lg md:text-xl text-charcoal leading-relaxed">
-                Sabor tradicional con ingredientes 100% naturales. Hecho a mano
-                con la mejor carne chilena.
-              </p>
-              <p className="text-base text-stone-gray">
-                Sin conservantes • Sin gluten • Alto en proteínas
-              </p>
-              <div className="flex flex-col sm:flex-row gap-md justify-center">
-                <Link to="/collections" className="btn-primary animate-wiggle">
-                  Ver Todos los Productos
-                </Link>
-                <Link
-                  to="/contacto"
-                  className="px-2xl py-md bg-canvas-light border-2 border-midnight rounded-md font-bold text-midnight hover:bg-bone-cream transition-colors text-center"
-                >
-                  Contáctanos
-                </Link>
-              </div>
-            </div>
+      {/* Button at Bottom */}
+      <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center pb-xl">
+        <Link
+          to="/collections"
+          className="text-display bg-fire-red text-harvest-gold font-bold text-3xl px-lg py-sm hover:bg-salsa-red transition-colors"
+          style={{borderRadius: '12px', boxShadow: '3px 3px 0px #000000'}}
+        >
+          VER PRODUCTOS
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function ProductShowcaseSection() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = 3; // For the carousel dots
+
+  const features = [
+    {
+      icon: vacaBeefy,
+      label: 'Vacuno natural',
+      alt: 'Icono de vaca - Producto vacuno natural',
+    },
+    {
+      icon: musleBeefy,
+      label: 'Alto en proteína',
+      alt: 'Icono de músculo - Alto en proteína',
+    },
+    {
+      icon: manoBeefy,
+      label: 'Snack funcional',
+      alt: 'Icono de puño - Snack funcional',
+    },
+    {
+      icon: montanaBeefy,
+      label: 'Producto nacional',
+      alt: 'Icono de montañas - Producto nacional',
+    },
+  ];
+
+  return (
+    <section className="bg-canvas-light py-5xl">
+      <div className="section-container">
+        {/* Product Image Carousel */}
+        <div className="mb-3xl px-xl md:px-3xl">
+          <img
+            src={triobeefy}
+            alt="Productos Beefy - Beef Jerky Argentino"
+            className="w-full h-auto block"
+          />
+
+          {/* Carousel Dots */}
+          <div className="flex justify-center gap-sm mt-lg">
+            {[...Array(totalSlides)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  currentSlide === index ? 'bg-midnight' : 'bg-stone-gray'
+                }`}
+                aria-label={`Ir a imagen ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Desktop Layout - Two Column Grid */}
-        <div className="hidden lg:grid lg:grid-cols-2 gap-3xl items-center">
-          {/* Left Column - Content */}
-          <div className="space-y-lg">
-            <h1 className="text-display text-5xl md:text-6xl lg:text-7xl text-fire-red leading-tight">
-              AUTÉNTICO CHARQUI CHILENO
-            </h1>
-            <p className="text-xl md:text-2xl text-charcoal leading-relaxed">
-              Sabor tradicional con ingredientes 100% naturales. Hecho a mano
-              con la mejor carne chilena.
-            </p>
-            <p className="text-lg text-stone-gray">
-              Sin conservantes • Sin gluten • Alto en proteínas
-            </p>
-            <div className="flex flex-col sm:flex-row gap-md">
-              <Link to="/collections" className="btn-primary animate-wiggle">
-                Ver Todos los Productos
-              </Link>
-              <Link
-                to="/contacto"
-                className="px-2xl py-md bg-canvas-light border-2 border-midnight rounded-md font-bold text-midnight hover:bg-bone-cream transition-colors text-center"
-              >
-                Contáctanos
-              </Link>
+        {/* Feature Cards Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-lg">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center text-center p-lg"
+            >
+              <div className="w-24 h-24 mb-md flex items-center justify-center">
+                <img
+                  src={feature.icon}
+                  alt={feature.alt}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <p className="text-display text-base text-midnight">
+                {feature.label}
+              </p>
             </div>
-          </div>
-
-          {/* Right Column - Visual */}
-          <div className="relative">
-            <div className="aspect-square bg-gradient-to-br from-fire-red to-ember-orange rounded-2xl border-brutal flex items-center justify-center text-8xl">
-              🥩
-            </div>
-            <div className="absolute -top-4 -right-4">
-              <span className="badge bg-salsa-red animate-rotate-slow">
-                ¡Nuevo!
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -200,69 +213,6 @@ function TrustBadges() {
               Proceso artesanal tradicional chileno
             </p>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function BundleBuilderCTA() {
-  return (
-    <section className="bg-gradient-to-br from-fire-red to-salsa-red py-4xl border-y-4 border-midnight">
-      <div className="section-container">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-lg">
-            <span className="inline-block bg-ember-orange text-canvas-light px-lg py-sm rounded-full font-bold text-sm border-2 border-midnight shadow-brutal-xs animate-bounce-subtle">
-              ⭐ NUEVA FUNCIÓN
-            </span>
-          </div>
-
-          <h2 className="text-display text-4xl md:text-5xl text-canvas-light mb-lg drop-shadow-brutal">
-            🥩 Armá tu Caja Perfecta
-          </h2>
-
-          <p className="text-xl md:text-2xl text-bone-cream mb-md font-semibold">
-            Elegí exactamente 7 unidades de tus sabores favoritos
-          </p>
-
-          <p className="text-base md:text-lg text-canvas-light/90 mb-xl max-w-2xl mx-auto">
-            Personalizá tu experiencia, mezclá los sabores que más te gustan y
-            ahorrá con nuestro pack especial de 7 unidades
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-md justify-center items-center mb-xl">
-            <div className="flex items-center gap-sm text-canvas-light">
-              <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center font-bold border-2 border-midnight">
-                ✓
-              </div>
-              <span className="text-base font-semibold">Elegís 7 sabores</span>
-            </div>
-            <div className="flex items-center gap-sm text-canvas-light">
-              <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center font-bold border-2 border-midnight">
-                ✓
-              </div>
-              <span className="text-base font-semibold">Mejor precio</span>
-            </div>
-            <div className="flex items-center gap-sm text-canvas-light">
-              <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center font-bold border-2 border-midnight">
-                ✓
-              </div>
-              <span className="text-base font-semibold">
-                100% personalizable
-              </span>
-            </div>
-          </div>
-
-          <Link
-            to="/products/arma-tu-caja"
-            className="inline-block bg-canvas-light text-fire-red px-3xl py-lg rounded-lg font-bold text-xl hover:bg-bone-cream transition-all border-4 border-midnight shadow-brutal-lg hover:shadow-brutal-xl hover:-translate-y-1 animate-wiggle-slow"
-          >
-            🎯 Crear Mi Caja Ahora
-          </Link>
-
-          <p className="text-sm text-canvas-light/80 mt-lg">
-            ✨ ¡Probá la función "Sorprendeme" para una selección aleatoria!
-          </p>
         </div>
       </div>
     </section>
@@ -426,34 +376,13 @@ function FeaturedProducts({
   products: Promise<RecommendedProductsQuery | null>;
 }) {
   return (
-    <section className="section-container py-4xl">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3xl items-center mb-3xl">
-        {/* Left Column - Text */}
-        <div className="text-center lg:text-left">
-          <h2 className="text-display text-4xl md:text-5xl lg:text-6xl text-fire-red mb-md leading-tight">
-            PRODUCTOS MÁS VENDIDOS
+    <section className="py-5xl">
+      <div className="section-container">
+        <div className="mb-3xl">
+          <h2 className="text-display text-5xl md:text-6xl text-fire-red leading-tight">
+            SNACKS
           </h2>
-          <p className="text-xl md:text-2xl text-charcoal leading-relaxed">
-            Descubre nuestros sabores favoritos que eligen miles de chilenos
-          </p>
         </div>
-
-        {/* Right Column - Visual/Stats */}
-        <div className="text-center lg:text-right">
-          <div className="bg-canvas-light p-2xl rounded-xl border-brutal-sm inline-block">
-            <div className="text-4xl md:text-5xl font-bold text-fire-red mb-sm">
-              10,000+
-            </div>
-            <p className="text-lg text-charcoal mb-md">Clientes satisfechos</p>
-            <div className="flex justify-center lg:justify-end gap-xs text-2xl mb-sm">
-              ⭐⭐⭐⭐⭐
-            </div>
-            <p className="text-base text-stone-gray">
-              4.9/5 basado en 1,247 reseñas
-            </p>
-          </div>
-        </div>
-      </div>
       <Suspense
         fallback={
           <div className="text-center text-lg">Cargando productos...</div>
@@ -463,7 +392,7 @@ function FeaturedProducts({
           {(response) => (
             <>
               {response && response.products.nodes.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-xl mb-2xl">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-xl mb-2xl">
                   {response.products.nodes.map((product) => (
                     <ProductItem
                       key={product.id}
@@ -486,6 +415,7 @@ function FeaturedProducts({
           )}
         </Await>
       </Suspense>
+      </div>
     </section>
   );
 }

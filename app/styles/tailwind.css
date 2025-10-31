@@ -5,6 +5,42 @@
 
 @import "tailwindcss";
 
+/* ========================================
+   CUSTOM FONTS - Happy Season
+   ======================================== */
+
+@font-face {
+  font-family: 'Happy Season';
+  src: url('/fonts/HappySeason-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Happy Season';
+  src: url('/fonts/HappySeason-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Happy Season';
+  src: url('/fonts/HappySeason-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Happy Season';
+  src: url('/fonts/HappySeason-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* ========================================
      COLOR SYSTEM - Extracted from Brand Assets
@@ -19,6 +55,7 @@
   --color-bone-cream: #f5e6d3;
   --color-toast-tan: #d4a574;
   --color-charcoal: #2d2d2d;
+  --color-harvest-gold: #F8EDCE;
   
   /* Accent Colors */
   --color-ember-orange: #e85d2a;
@@ -42,7 +79,7 @@
      ======================================== */
   
   /* Font Families */
-  --font-display: "Bebas Neue", "Impact", system-ui, sans-serif;
+  --font-display: "Happy Season", system-ui, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-accent: "Permanent Marker", "Comic Sans MS", cursive;
   
@@ -275,15 +312,7 @@
   /* Product Card */
   .product-card {
     background: var(--color-canvas-light);
-    border: 3px solid var(--color-midnight);
-    border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all var(--duration-base) var(--ease-out);
-  }
-
-  .product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-brutal);
   }
 
   /* Badge */

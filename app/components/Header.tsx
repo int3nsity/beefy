@@ -25,14 +25,33 @@ export function Header({
 }: HeaderProps) {
   const {shop, menu} = header;
   return (
-    <header className="bg-bone-cream border-b-2 border-midnight sticky top-0 z-[var(--z-sticky)]">
+    <header className="bg-smoke-black border-b border-charcoal sticky top-0 z-[var(--z-sticky)]">
       <div className="section-container py-md">
-        <div className="flex items-center justify-between">
+        {/* Mobile Layout */}
+        <div className="flex lg:hidden items-center justify-between relative">
+          <HeaderMenuMobileToggle />
           <NavLink
             prefetch="intent"
             to="/"
             end
-            className="text-display text-2xl text-fire-red hover:text-ember-orange transition-colors"
+            className="text-display text-2xl font-bold text-harvest-gold absolute left-1/2 transform -translate-x-1/2 no-underline"
+            style={{textDecoration: 'none'}}
+          >
+            {shop.name}
+          </NavLink>
+          <div className="flex items-center gap-md ml-auto">
+            <CartToggle cart={cart} />
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden lg:flex items-center justify-between">
+          <NavLink
+            prefetch="intent"
+            to="/"
+            end
+            className="text-display text-3xl font-bold transition-colors text-harvest-gold hover:text-bone-cream no-underline"
+            style={{textDecoration: 'none'}}
           >
             {shop.name}
           </NavLink>
@@ -79,7 +98,7 @@ export function HeaderMenu({
         <NavLink
           prefetch="intent"
           to="/products/arma-tu-caja"
-          className="bg-fire-red text-canvas-light px-lg py-sm rounded-md font-bold text-base hover:bg-salsa-red transition-all hover:shadow-brutal-xs border-2 border-midnight"
+          className="bg-fire-red text-canvas-light px-lg py-sm rounded-md font-bold text-base hover:bg-salsa-red transition-all hover:shadow-brutal-xs border-2 border-canvas-light"
         >
           🥩 Armá tu Caja
         </NavLink>
@@ -115,7 +134,7 @@ export function HeaderMenu({
                 `text-base font-medium transition-colors ${
                   isActive
                     ? 'text-fire-red font-bold'
-                    : 'text-charcoal hover:text-fire-red'
+                    : 'text-harvest-gold hover:text-fire-red'
                 }`
               }
             >
@@ -130,7 +149,7 @@ export function HeaderMenu({
             `text-base font-medium transition-colors ${
               isActive
                 ? 'text-fire-red font-bold'
-                : 'text-charcoal hover:text-fire-red'
+                : 'text-harvest-gold hover:text-fire-red'
             }`
           }
         >
@@ -208,12 +227,10 @@ function HeaderCtas({
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
     <nav className="flex items-center gap-md" role="navigation">
-      <HeaderMenuMobileToggle />
-      <SearchToggle />
       <NavLink
         prefetch="intent"
         to="/account"
-        className="hidden md:block text-sm font-medium text-charcoal hover:text-fire-red transition-colors"
+        className="text-sm font-medium text-harvest-gold hover:text-bone-cream transition-colors"
       >
         <Suspense fallback="Cuenta">
           <Await resolve={isLoggedIn} errorElement="Iniciar Sesión">
@@ -230,7 +247,7 @@ function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
     <button
-      className="lg:hidden text-2xl text-charcoal hover:text-fire-red transition-colors"
+      className="lg:hidden text-2xl text-harvest-gold hover:text-bone-cream transition-colors"
       onClick={() => open('mobile')}
       aria-label="Abrir menú"
     >
@@ -243,10 +260,24 @@ function SearchToggle() {
   const {open} = useAside();
   return (
     <button
-      className="text-sm font-medium text-charcoal hover:text-fire-red transition-colors"
+      className="text-harvest-gold hover:text-bone-cream transition-colors"
       onClick={() => open('search')}
+      aria-label="Buscar"
     >
-      Buscar
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-6 h-6"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
     </button>
   );
 }
@@ -267,7 +298,7 @@ function CartBadge({count}: {count: number | null}) {
           url: window.location.href || '',
         } as CartViewPayload);
       }}
-      className="relative text-charcoal hover:text-fire-red transition-colors p-sm rounded-md hover:bg-bone-cream"
+      className="relative text-harvest-gold hover:text-bone-cream transition-colors p-sm rounded-md hover:bg-charcoal"
       aria-label="Abrir carrito"
     >
       <svg
